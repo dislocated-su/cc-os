@@ -9,6 +9,7 @@ function installPrograms()
             calc = {link="5v4aar72", path="bin"},
             play2048 = {link="RHhdEZ52", path="bin"}
         }
+
         for name,cfg in pairs(default) do
             shell.run(
             "pastebin", 
@@ -19,7 +20,7 @@ function installPrograms()
     end
 end
 
-if not fs.exists("/bin") then
+function setup()
     print("Initialising ratOS")
     shell.run("mkdir", "bin")
     shell.run("mkdir", "home")
@@ -28,9 +29,11 @@ if not fs.exists("/bin") then
     
     installPrograms()
     print("Installed default programs")
+    
     if os.computerLabel() == nil then
         os.setComputerLabel("RatCo Micro")
     end
+    
     settings.set("motd.enable", false)
     print("Configured settings")
     
@@ -41,23 +44,35 @@ Set computer name with
 label set <name>
 Press [E] to enter ratOs]])
     
-    while true do
-        local event, key = os.pullEvent("key")
-        if key == keys.e then
-            shell.run("clear")
-            break
-        end
-    end 
+    -- repeat until E is pressed
+    local event, key
+    repeat
+        event, key = os.pullEvent("key")
+    until key == keys.e
+    shell.run("clear")
 end    
 
+-- Normal start
+function boot()
+    -- Welcome MOTD
+    print("Welcome to RatCo Micro")
+    print("Current installed programs:")
+    -- Loop through every file in bin (k as counter, v as full file path)
+    for k,v in pairs(fs.find("/bin/*")) do
+        -- Everything in bin gets a system-wide alias
+        shell.setAlias(fs.getName(v),"/" .. v)
+        print(k ..".", fs.getName(v))
+    end
+    
+    if fs.exists("autorun") then
+        shell.run("background", "autorun")
+    end
 
-print("Welcome to RatCo Micro")
-print("Current installed programs:")
-for k,v in pairs(fs.find("/bin/*")) do
-    shell.setAlias(fs.getName(v),"/" .. v)
-    print(k ..".","/".. v,fs.getName(v))
 end
 
-if fs.exists("autorun") then
-    shell.run("background", "autorun")
+
+if not fs.exists("/bin") then
+    setup()
 end
+
+boot()
