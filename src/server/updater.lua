@@ -2,7 +2,7 @@ local function serve()
     -- assume rednet is already running
     local protocol = "ratOSupdate"
 
-    local modems = {peripheral.find("modem")}
+    local modems = peripheral.find("modem")
     for _, modem in pairs(modems) do
         rednet.open(modem)
     end
