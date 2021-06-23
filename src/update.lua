@@ -1,8 +1,9 @@
-local protocol = "ratOSupdate"
+local protocol = "ru"
 
 function fetchVersion(serverID)
     local recieved = rednet.send(serverID, "getVersion")
     if recieved then
+        print("version recieved")
         local nSenderID, version, sProtocol = rednet.recieve(protocol, 10)
         return parseVersion(version)
     else
@@ -76,8 +77,9 @@ local function update()
     local serverID = rednet.lookup(protocol)
     local success = false
     if serverID ~= nil then
+        print("server id " .. serverID)
         if updateRequired(serverID) then
-            local recieved = rednet.send("update")
+            local recieved = rednet.send(serverID, "update")
             if recieved then
                 -- Update here
                 success = true
@@ -87,12 +89,7 @@ local function update()
     return success
 end
 
-rednet.run()
+local modem = peripheral.find("modem")
+rednet.open(peripheral.getName(modem))
 
-local modems = peripheral.find("modem")
-
-for _, modem in pairs(modems) do
-    rednet.open(modem)
-end
-
-term.write(update())
+print(update())

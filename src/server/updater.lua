@@ -1,19 +1,16 @@
 local function serve()
     -- assume rednet is already running
-    local protocol = "ratOSupdate"
+    local protocol = "ru"
+    local hostname = "server"
 
-    local modems = peripheral.find("modem")
-    for _, modem in pairs(modems) do
-        rednet.open(modem)
-    end
-
-    rednet.host(protocol)
-
+    rednet.host(protocol, hostname)
+    
+    term.write("Serving protocol " .. protocol .. " at " .. hostname)
     while true do
         local nSenderID, message, sProtocol
 
         repeat
-            nSenderID, message, sProtocol = rednet.recieve(protocol)
+            nSenderID, message, sProtocol = rednet.receive(protocol)
         until message ~= ""
 
         if message == "getVersion" then
