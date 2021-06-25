@@ -1,8 +1,11 @@
 modem = peripheral.find("modem")
 modem.open(1002)
- 
+
 local request = {
-    type = "test",
+    action = "send",
+    userID = "test1",
+    payeeID = "test2",
+    amount = 100,
     compID = os.getComputerID(),
     reqID = os.getComputerID().."-"..os.day().."-".. os.time()
 } 

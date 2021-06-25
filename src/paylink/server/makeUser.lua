@@ -1,5 +1,5 @@
 local args = {...}
- 
+
 if #args ~= 1 then
     print("Error. Usage: makeUser [username]")
 else
