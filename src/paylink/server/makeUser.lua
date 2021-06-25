@@ -10,7 +10,7 @@ else
         users = {}
     end
     print(textutils.serialise(users))
-    users[args[1]] = "ee"
+    users[args[1]] = { balance = 0 }
     local usersf = fs.open("users.lua", "w")
     usersf.write(textutils.serialise(users))
     usersf.close()
