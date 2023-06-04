@@ -1,5 +1,15 @@
 local protocol = "ru"
 
+function readFile(path,tbl)
+    local index = 1
+
+    for line in io.lines(path) do
+       tbl[index] = l
+       index = index + 1
+    end
+
+    tbl["content"] = function() table.concat(tbl, "\n") end
+end
 function fetchVersion(serverID)
     local recieved = rednet.send(serverID, "getVersion")
     if recieved then
